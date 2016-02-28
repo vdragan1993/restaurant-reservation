@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<meta charset="utf-8">
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'restaurant/layout.css' %}" type="text/css">
+    <script src="{% static 'restaurant/sorttable.js' %}"></script>
+</head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1>Restaurant</h1>
+	  <h2>Welcome, {{ user.get_full_name }}</h2>
+    </div>
+    <nav>
+      <ul>
+          <li><a href="{% url 'restaurant:guest' guest.id %}">Home</a></li>
+          <li><a href="{% url 'restaurant:restaurantlist' guest.id %}">Restaurants</a></li>
+          <li><a href="{% url 'restaurant:friends' guest.id %}">Friends</a></li>
+          <li><a href="{% url 'restaurant:profile' guest.id %}">Profile</a></li>
+          <li class="last"><a href="{% url 'restaurant:logout' %}">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <!-- Slider -->
+    <section id="slider" class="clear">
+        <h1>Profile</h1>
+        <br />
+        {% if error_message %}<p id="error">{{ error_message }}</p>{% endif %}
+        {% if info_message %}<p id="info">{{ info_message }}</p>{% endif %}
+        <br />
+        <form action="{% url 'restaurant:update' guest.id %}" method="post" class="menu_item">
+              {% csrf_token %}
+              <br />
+              {% if user.first_name %}
+                  <input id = "name" name = "first_name" type="text" value="{{ user.first_name }}">
+                  {% else %}
+                  <input id= "name" name="first_name" type="text" placeholder="First Name">
+              {% endif %}
+              <br />
+              {% if user.last_name %}
+                  <input id = "name" name = "last_name" type="text" value="{{ user.last_name }}">
+                  {% else %}
+                  <input id= "name" name="last_name" type="text" placeholder="Last Name">
+              {% endif %}
+              <br />
+              {% if guest.address %}
+                  <input id = "name" name = "address" type="text" value="{{ guest.address }}">
+                  {% else %}
+                  <input id= "name" name="address" type="text" placeholder="Address">
+              {% endif %}
+              <br />
+              <input id= "name" name = "password1" type="password" placeholder="New Password"  pattern=".{8,30}"  title="8 characters minimum, 30 maximum">
+              <br />
+              <input id= "name" name = "password2" type="password" placeholder="Repeat New Password"  pattern=".{8,30}"  title="8 characters minimum, 30 maximum">
+              <br />
+              <input type="submit" id = "sf_submit" value="Update">
+              <br />
+        </form>
+        <br />
+        <br />
+        <h1><a id="edit" href="{% url 'restaurant:myreservations' guest.id %}">Show my Reservations</a></h1>
+        <br />
+        <br />
+        <h2>Friends</h2>
+        <br />
+        <br />
+        <table id="visits" class="sortable">
+            <thead>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email address</th>
+                <th>Remove Friend</th>
+            </thead>
+            {% for friend in friends %}
+                <tr>
+                    <td>{{ friend.user.first_name }}</td>
+                    <td>{{ friend.user.last_name }}</td>
+                    <td>{{ friend.user.email }}</td>
+                    <td><a href="{% url 'restaurant:disconnect' guest.id friend.id %}"><button id="delete">Remove</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br />
+        <br />
+        <br />
+        <h2>Search for friends</h2>
+        <br />
+        {% if search_error %}<p id="error">{{ search_error }}</p>{% endif %}
+        <br />
+        <form action="{% url 'restaurant:searching' guest.id %}" method="post" class="menu_item">
+              {% csrf_token %}
+              <br />
+              <input id = "name" name = "name" type="text" required placeholder="Search Users">
+              <br />
+              <input type="submit" id = "sf_submit" value="Search">
+              <br />
+        </form>
+        <br />
+        <br />
+        {% if connections %}
+            <h3>Found Users</h3>
+            <br />
+            <br />
+            <table id="visits" class="sortable">
+            <thead>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email address</th>
+                <th>Make Friend</th>
+            </thead>
+            {% for connection in connections %}
+                <tr>
+                    <td>{{ connection.user.first_name }}</td>
+                    <td>{{ connection.user.last_name }}</td>
+                    <td>{{ connection.user.email }}</td>
+                    <td><a href="{% url 'restaurant:connect' guest.id connection.id %}"><button id="delete">Connect</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </section>
+    <!-- / content body -->
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Internet Software Architectures 2015/16</p>
+    <p class="fl_right">Dragan Vidaković RA 134/2012</p>
+  </footer>
+</div>
+</body>
+</html>

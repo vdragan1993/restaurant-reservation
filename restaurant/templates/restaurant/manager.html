@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<meta charset="utf-8">
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'restaurant/layout.css' %}" type="text/css">
+    <script src="{% static 'restaurant/sorttable.js' %}"></script>
+</head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1>Restaurant</h1>
+	  <h2>Welcome, {{ user.get_full_name }}</h2>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'restaurant:manager' manager.id %}">Home</a></li>
+           <li><a href="{% url 'restaurant:profiling' manager.id %}">Profile</a></li>
+        <li class="last"><a href="{% url 'restaurant:logout' %}">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <!-- Slider -->
+    <section id="slider" class="clear">
+        <h1>{{ restaurant.name }}</h1>
+        <h2>{{ restaurant.description }}</h2>
+        <br />
+        <h2>{{ restaurant.address }}</h2>
+        <br />
+        <br />
+        <a href="{% url 'restaurant:menu' restaurant.id manager.id %}"><button id="button">Check Restaurant's Menu</button></a>
+        <br />
+        {% if restaurant.is_ready %}
+                <br />
+                <h3>Sitting Schedule</h3>
+                <br />
+                <table id="tables" class="sortable">
+                    {% for i in rows %}
+                        <tr>
+                        {% for j in columns %}
+                            <td>
+                            {% for t in tables %}
+                                {% if t.row == i and t.column == j  %}
+                                    <p>{{ t.number }}</p>
+                                {% endif %}
+                            {% endfor %}
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <a href="{% url 'restaurant:tables' restaurant.id manager.id %}"><button id="button">Set Sitting Schedule</button></a>
+        {% endif %}
+    </section>
+    <!-- / content body -->
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Internet Software Architectures 2015/16</p>
+    <p class="fl_right">Dragan Vidaković RA 134/2012</p>
+  </footer>
+</div>
+</body>
+</html>

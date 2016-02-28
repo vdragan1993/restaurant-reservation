@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<meta charset="utf-8">
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'restaurant/layout.css' %}" type="text/css">
+</head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1>Restaurant</h1>
+	  <h2>Welcome to our Website</h2>
+    </div>
+    <nav>
+      <ul>
+        <li class="last"><a href="{% url 'restaurant:index' %}">Log In</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <!-- Slider -->
+    <section id="slider" class="clear">
+        <h2>Register to our website</h2>
+        <br />
+        <br />
+        {% if info_message %}<p id="info">{{ info_message }}</p>{% endif %}
+        {% if error_message %}<p id="error">{{ error_message }}</p>{% endif %}
+        <br />
+        <br />
+        <h3>Fill form below</h3>
+        <form action="{% url 'restaurant:registration' %}" method="post" class="menu_item">
+              {% csrf_token %}
+              <br />
+              <input id = "name" name = "username" type="email" placeholder="Email address" maxlength="30" required>
+              <br />
+              <input id= "name" name = "password1" type="password" placeholder="Password"  pattern=".{8,30}"  required title="8 characters minimum, 30 maximum">
+              <br />
+              <input id = "name" name = "password2" type="password" placeholder="Repeat Password" pattern=".{8,30}" required title="8 characters minimum, 30 maximum">
+              <br />
+              <input type="submit" id = "sf_submit" value="Register">
+              <br />
+          </form>
+    </section>
+    <!-- / content body -->
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Internet Software Architectures 2015/16</p>
+    <p class="fl_right">Dragan Vidaković RA 134/2012</p>
+  </footer>
+</div>
+</body>
+</html>

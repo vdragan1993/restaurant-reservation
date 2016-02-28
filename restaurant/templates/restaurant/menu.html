@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<meta charset="utf-8">
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'restaurant/layout.css' %}" type="text/css">
+    <script src="{% static 'restaurant/sorttable.js' %}"></script>
+</head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1>Restaurant</h1>
+	  <h2>Welcome, {{ user.get_full_name }}</h2>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'restaurant:manager' manager.id %}">Home</a></li>
+           <li><a href="{% url 'restaurant:profiling' manager.id %}">Profile</a></li>
+        <li class="last"><a href="{% url 'restaurant:logout' %}">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <!-- Slider -->
+    <section id="slider" class="clear">
+        <h1>{{ restaurant.name }}</h1>
+        <h2>{{ restaurant.description }}</h2>
+        <br />
+        <h2>{{ restaurant.address }}</h2>
+        <br />
+        <br />
+        <h3>Menu</h3>
+        <br />
+        <br />
+        <table id="menus" class="sortable">
+            <thead>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Delete Item</th>
+                <th>Edit Item</th>
+            </thead>
+            {% for item in menu %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.description }}</td>
+                    <td id="price">{{ item.price }} </td>
+                    <td><a href="{% url 'restaurant:remove' item.id restaurant.id manager.id %}"><button id="delete">Delete</button></a></td>
+                    <td><a href="{% url 'restaurant:edit' item.id restaurant.id manager.id %}"><button id="edit">Edit</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br />
+        <br />
+        <br />
+        <h3>Insert new Menu item</h3>
+        <form action="{% url 'restaurant:insert' restaurant.id manager.id %}" method="post" class="menu_item">
+              {% csrf_token %}
+              <br />
+              <input id = "name" name = "name" type="text" placeholder="Name" maxlength="100" required>
+              <br />
+              <textarea id = "description" name = "description" type="text" placeholder="Description" maxlength="200" required></textarea>
+              <br />
+              <input id = "price" name = "price" type="number" placeholder="Price" required step="0.01">
+              <br />
+              <input type="submit" id = "sf_submit" value="Insert">
+              <br />
+          </form>
+    </section>
+    <!-- / content body -->
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Internet Software Architectures 2015/16</p>
+    <p class="fl_right">Dragan Vidaković RA 134/2012</p>
+  </footer>
+</div>
+</body>
+</html>

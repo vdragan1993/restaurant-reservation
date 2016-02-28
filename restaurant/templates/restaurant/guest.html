@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<meta charset="utf-8">
+    {% load staticfiles %}
+<link rel="stylesheet" href="{% static 'restaurant/layout.css' %}" type="text/css">
+    <script src="{% static 'restaurant/sorttable.js' %}"></script>
+</head>
+<body>
+<div class="wrapper row1">
+  <header id="header" class="clear">
+    <div id="hgroup">
+      <h1>Restaurant</h1>
+	  <h2>Welcome, {{ user.get_full_name }}</h2>
+    </div>
+    <nav>
+      <ul>
+          <li><a href="{% url 'restaurant:guest' guest.id %}">Home</a></li>
+          <li><a href="{% url 'restaurant:restaurantlist' guest.id %}">Restaurants</a></li>
+          <li><a href="{% url 'restaurant:friends' guest.id %}">Friends</a></li>
+          <li><a href="{% url 'restaurant:profile' guest.id %}">Profile</a></li>
+          <li class="last"><a href="{% url 'restaurant:logout' %}">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+<!-- content -->
+<div class="wrapper row2">
+  <div id="container" class="clear">
+    <!-- Slider -->
+    <section id="slider" class="clear">
+        {% if info_message %}
+            <br />
+            <p id="info">{{ info_message }}</p>
+            <br />
+            <br />
+        {% endif %}
+        <h1>History of Visits</h1>
+        <br />
+        <br />
+        <table id="visits" class="sortable">
+            <thead>
+                <th>Restaurant</th>
+                <th>Date and Time</th>
+                <th>Duration (h)</th>
+                <th>Rating</th>
+            </thead>
+            {% for visit in visits %}
+                <tr>
+                    <td>{{ visit.reservation.restaurant.name }}</td>
+                    <td>{{ visit.reservation.coming }}</td>
+                    <td>{{ visit.reservation.duration }}</td>
+                    {% if visit.grade %}
+                        <td>{{ visit.grade }}</td>
+                        {% else %}
+                        <td><a href="{% url 'restaurant:rate' guest.id visit.id %}"><button id="delete">Rate</button></a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+    <!-- / content body -->
+  </div>
+</div>
+<!-- Footer -->
+<div class="wrapper row3">
+  <footer id="footer" class="clear">
+    <p class="fl_left">Internet Software Architectures 2015/16</p>
+    <p class="fl_right">Dragan Vidaković RA 134/2012</p>
+  </footer>
+</div>
+</body>
+</html>
